@@ -1,10 +1,13 @@
 pipeline {
     agent any
-    tools{
+    
+     tools{
         jdk 'jdk17'
         maven 'maven3'
     }
-    environment{
+    
+    environment {
+        
         SCANNER_HOME= tool 'sonar-scanner'
     }
 
@@ -14,28 +17,26 @@ pipeline {
                 git 'https://github.com/jaiswaladi246/secretsanta-generator.git'
             }
         }
-
+        
         stage('Code-Compile') {
             steps {
                sh "mvn clean compile"
             }
         }
-        
+         
         stage('Unit Tests') {
             steps {
                sh "mvn test"
             }
         }
-        
-		stage('OWASP Dependency Check') {
+       stage('OWASP Dependency Check') {
             steps {
                dependencyCheck additionalArguments: ' --scan ./ ', odcInstallation: 'DC'
                     dependencyCheckPublisher pattern: '**/dependency-check-report.xml'
             }
         }
-
-
-        stage('Sonar Analysis') {
+        
+         stage('Sonar Analysis') {
             steps {
                withSonarQubeEnv('sonar'){
                    sh ''' $SCANNER_HOME/bin/sonar-scanner -Dsonar.projectName=Santa \
@@ -44,15 +45,14 @@ pipeline {
                }
             }
         }
-
-		 
-        stage('Code-Build') {
+        
+       
+       stage('Code-Build') {
             steps {
                sh "mvn clean package"
             }
         }
-
-         stage('Docker Build') {
+          stage('Docker Build') {
             steps {
                script{
                    withDockerRegistry(credentialsId: 'docker-cred') {
@@ -61,8 +61,8 @@ pipeline {
                }
             }
         }
-
-        stage('Docker Push') {
+        
+           stage('Docker Push') {
             steps {
                script{
                    withDockerRegistry(credentialsId: 'docker-cred') {
@@ -74,20 +74,17 @@ pipeline {
             }
         }
         
-        	 
-      
-        
-          stage('Docker deploy') {
+       stage('Docker deploy') {
             steps {
                script{
                    withDockerRegistry(credentialsId: 'docker-cred') {
-                  
-                    sh "docker run -d -p 8081:8000 snreddyboggu/dotnet-demoapp"
+                    
+                    sh "docker run -d -p 8081:8000 snreddyboggu/santa123:latest"
                  }
                }
             }
         }
-		
-
-    
+        
+        
+    }
 }
