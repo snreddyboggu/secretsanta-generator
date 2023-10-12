@@ -12,7 +12,7 @@ pipeline {
     }
 
     stages {
-        stage('git-checkout') {
+        stage('git-checkoutt') {
             steps {
                 git 'https://github.com/jaiswaladi246/secretsanta-generator.git'
             }
