@@ -54,7 +54,7 @@ The database url used is `jdbc:h2:mem:testdb`.
 
 This project was a personal project to learn more about Spring development, database management, and industry application architecture.
 
-A small summary of the skills showcased during this project: :small_red_triangle_down:
+A small summary dd of the skills showcased during this project: :small_red_triangle_down:
 
 * Java Spring Core, HTML5, CSS and similar topics
 * Spring MVC Controller and View management & annotations
